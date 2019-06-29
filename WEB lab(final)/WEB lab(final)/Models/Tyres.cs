@@ -12,7 +12,7 @@ namespace WEB_lab_final_.Models
         public int TyreId { set; get; }
         public string Brand { set; get; }
         public string Country { set; get; }
-        //[RegularExpression(@"^[\d]{3}+/+[\d]{2}+/+[\d]{2}$", ErrorMessage ="Input will  be in xxx/xx/xx format x:nmbers")]
+        [RegularExpression(@"^[\d]{3}/[\d]{2}/[\d]{2}$", ErrorMessage ="Input will  be in xxx/xx/xx format x = 0123...")]
         public string Size { set; get; }
         public string Condition { set; get; }
         public int Quantity { set; get; }

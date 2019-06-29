@@ -16,7 +16,7 @@ namespace WEB_lab_final_
     {
         protected void Application_Start()
         {
-            DataInitializer init = new DataInitializer();
+            //DataInitializer init = new DataInitializer();
             //Database.SetInitializer<DbContext>(new DropCreateDatabaseIfModelChanges<DbContext>());  noNeedOfThisLine
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
