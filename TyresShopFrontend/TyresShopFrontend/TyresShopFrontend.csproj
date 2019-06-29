@@ -67,7 +67,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bootstrap[united].min_2.css" />
+    <Content Include="Index.html" />
+    <Content Include="StyleSheet1.css" />
     <Content Include="Web.config" />
+    <Content Include="â--Pngtreeâ--alloy wheel. car rims illustration_4773523.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,0 +1,11 @@
+﻿body{
+    margin:0;
+    padding:0;
+}
+#logo{
+    height:10vw;
+    width:auto;
+}
+#shop-title{
+    font-size:10vw;
+}
