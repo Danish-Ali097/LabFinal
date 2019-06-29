@@ -67,9 +67,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="1208_largecroped.jpg" />
     <Content Include="bootstrap[united].min_2.css" />
+    <Content Include="continental%281%29.png" />
     <Content Include="Index.html" />
     <Content Include="StyleSheet1.css" />
+    <Content Include="tire-stickers-dunlop.jpg" />
+    <Content Include="Tyres.html" />
     <Content Include="Web.config" />
     <Content Include="â--Pngtreeâ--alloy wheel. car rims illustration_4773523.png" />
   </ItemGroup>
