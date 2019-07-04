@@ -3,12 +3,14 @@
 <head>
     <link href="bootstrap[united].min_2.css" rel="stylesheet" />
     <link href="StyleSheet1.css" rel="stylesheet" />
+    <script src="angular.min.js"></script>
+    <script src="jquery.min.js"></script>
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>Home | The Tyre Shop - Welcome to the tyre shop best place to get premium quality tyres</title>
+    <title>Tyres | Search</title>
 </head>
-<body>
+<body ng-app="myApp">
     <div class="text-center">
         <h1 id="shop-title" class="bg-light">The Tyre Sh<img src="â--Pngtreeâ--alloy wheel. car rims illustration_4773523.png" alt="shop_logo" id="logo" />P</h1>
     </div>
@@ -37,7 +39,23 @@
             </ul>
         </div>
     </nav>
-    <div class="container">
+    <div class="container" ng-controller="getCtrl">
+        {{error}}
+        <div ng-model="result"></div>
     </div>
+    <script>
+        var app = angular.module('myApp', []);
+        app.controller('getCtrl', function ($scope, $http) {
+            var onsuccess = function (data, status, headers, config) {
+                $scope.result = data;
+            };
+            var onerror = function (data, status, headers, config) {
+                $scope.error = "An Error occured : "+status;
+            };
+            var promise = $http.get('http://localhost:49830/api/Tyres');
+            promise.success(onsuccess);
+            promise.error(onerror);
+        });
+    </script>
 </body>
 </html>
