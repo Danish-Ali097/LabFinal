@@ -39,18 +39,84 @@
             </ul>
         </div>
     </nav>
-    <div class="container" ng-controller="getCtrl">
-        {{error}}
-        <div ng-model="result"></div>
+    <div class="container" ng-controller="getCtrl" ng-init="myError='1'">
+        <div class="alert alert-dismissible alert-warning" ng-hide="myError">
+            <button class="close" type="button" data-dismiss="alert">&times;</button>
+            <h4 class="alert-heading">Error!</h4>
+            <p class="mb-0"> {{error}}</p>
+        </div>
+        {{msg}}
+
+        <div class="card mt-2" ng-repeat="data in result" ng-init="tPrice='0'">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title">{{data.Brand}}</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6 class="card-text">Name : </h6>
+                        <h6 class="card-text">Size : </h6>
+                        <h6 class="card-text">Condition : </h6>
+                        <h6 class="card-text">Price : </h6>
+                        <h6 class="card-text">Quantity : </h6>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>{{data.Brand}}</h6>
+                        <h6>{{data.Size}}</h6>
+                        <h6>{{data.Condition}}</h6>
+                        <h6>{{data.Selling_Price}}</h6>
+                        <div class="form-row">
+                            <input type="number" id="qty" ng-init="qty=0" ng-model="qty" ng-keypress="calcTotal(data.Selling_Price,qty )" min="1" max="{{data.Quantity}}" /> <h6 class="text-muted ml-1">  / {{data.Quantity}}</h6>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <form>
+                    <input type="text" class="form-control" ng-model="cName" placeholder="Customer Name" required />
+                </form>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <input class="btn btn-primary mr-left" ng-click="purchase(data.TyreId)" type="submit" value="Purchase" />
+                    <h4 class="ml-3"> Total Price : {{tPrice}} </h4>
+                </div>
+            </div>
+        </div>
     </div>
     <script>
         var app = angular.module('myApp', []);
         app.controller('getCtrl', function ($scope, $http) {
+            $scope.calcTotal = function ( sprice, qty )
+            {
+                //alert("total function called : qty : "+qty+" price : "+sprice);
+                $scope.tPrice = qty * sprice;
+                alert($scope.tPrice);
+            }
+            $scope.purchase = function (tid)
+            {
+
+                var data = { "TyreId" : tid, "Quantity" : $scope.qty, "CustomerName" : $scope.cName, "TransitionDateTime" : new Date , "CashReceived" :$scope.tPrice };
+                var onsuccess = function (data, statue, headers, config)
+                {
+                    $scope.msg = `<div class = "alert alert-info"><strong>Success!</strong>successfully inserted
+                                  </div>`;
+                }
+                var onerror = function (data, statue, headers, config)
+                {
+                    $scope.error = "An Error occured while inserting data : " + status;
+                    $scope.myError = '0';
+                }
+                var promise = $http.post('http://localhost:49830/api/Sales', data);
+                promise.success(onsuccess);
+                promise.error(onerror);
+            }
+            //get
             var onsuccess = function (data, status, headers, config) {
                 $scope.result = data;
             };
             var onerror = function (data, status, headers, config) {
-                $scope.error = "An Error occured : "+status;
+                $scope.error = "An Error occured while loading : " + status;
+                $scope.myError = '0';
             };
             var promise = $http.get('http://localhost:49830/api/Tyres');
             promise.success(onsuccess);
