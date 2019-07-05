@@ -34,7 +34,7 @@
             </ul>
             <ul class="navbar-nav mr-left float-right">
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-shopping-cart"></i> Cart</a>
+                    <a class="nav-link" href="#"><i class="fa fa-history"></i> Sale History</a>
                 </li>
             </ul>
         </div>
@@ -46,60 +46,60 @@
             <p class="mb-0"> {{error}}</p>
         </div>
         {{msg}}
-
-        <div class="card mt-2" ng-repeat="data in result" ng-init="tPrice='0'">
-            <div class="card-header bg-primary text-white">
-                <h5 class="card-title">{{data.Brand}}</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <h6 class="card-text">Name : </h6>
-                        <h6 class="card-text">Size : </h6>
-                        <h6 class="card-text">Condition : </h6>
-                        <h6 class="card-text">Price : </h6>
-                        <h6 class="card-text">Quantity : </h6>
-                    </div>
-                    <div class="col-md-6">
-                        <h6>{{data.Brand}}</h6>
-                        <h6>{{data.Size}}</h6>
-                        <h6>{{data.Condition}}</h6>
-                        <h6>{{data.Selling_Price}}</h6>
-                        <div class="form-row">
-                            <input type="number" id="qty" ng-init="qty=0" ng-model="qty" ng-keypress="calcTotal(data.Selling_Price,qty )" min="1" max="{{data.Quantity}}" /> <h6 class="text-muted ml-1">  / {{data.Quantity}}</h6>
-                        </div>
-                    </div>
-                </div>
-                <hr />
-                <form>
-                    <input type="text" class="form-control" ng-model="cName" placeholder="Customer Name" required />
-                </form>
-            </div>
-            <div class="card-footer">
-                <div class="row">
-                    <input class="btn btn-primary mr-left" ng-click="purchase(data.TyreId)" type="submit" value="Purchase" />
-                    <h4 class="ml-3"> Total Price : {{tPrice}} </h4>
-                </div>
-            </div>
+        <div class="form-group mt-5">
+            <select class="custom-select" ng-model="select" ng-change="change()">
+                <option value="{{data.TyreId}}" ng-repeat="data in result"> {{data.Brand}} {{data.Size}} </option>
+            </select>
         </div>
+        <div class="form-group">
+            <input type="text" name="name" ng-model="cName" placeholder="Customer Name" class="form-control" />
+        </div>
+        <div class="form-group">
+            <input type="number" class="form-control" ng-model="qty" ng-change="calPrice()" placeholder="Quantity" name="quantity" min="1" max="{{totalQty}}" />
+            <p class="text-muted">/ {{totalQty}}</p>
+            <input type="submit" ng-click="purchase(select)" value="Sale" class="btn btn-primary" />
+        </div>
+        <span ng-init="Price='0'">Total Price : {{tPrice}}</span>
     </div>
     <script>
         var app = angular.module('myApp', []);
         app.controller('getCtrl', function ($scope, $http) {
-            $scope.calcTotal = function ( sprice, qty )
+            $scope.calPrice = function ()
             {
-                //alert("total function called : qty : "+qty+" price : "+sprice);
-                $scope.tPrice = qty * sprice;
-                alert($scope.tPrice);
+                if ($scope.qty > $scope.totalQty) {
+                    $scope.qty = $scope.totalQty;
+                }
+                var price = $scope.qty * $scope.Price;
+                //alert(price);
+                $scope.tPrice = '0';
+                $scope.tPrice = price;
+            }
+            $scope.change = function ()
+            {
+                var id = $scope.select;
+                //alert(id);
+                var onsuccess = function (data, error ,headers, config)
+                {
+                    //console.log(data.Quantity);
+                    $scope.totalQty = data.Quantity;
+                    $scope.Price = data.Selling_Price;
+                }
+                var onerror = function ()
+                {
+                    $scope.error = "An Error occured while inserting data : " + status;
+                    $scope.myError = '0';
+                }
+                var promise = $http.get('http://localhost:49830/api/Tyres/' + id);
+                promise.success(onsuccess);
+                promise.error(onerror);
             }
             $scope.purchase = function (tid)
             {
-
+                //console.log("tid : " + tid + "\n qty : " + $scope.qty + "\n cname : " + $scope.cName);
                 var data = { "TyreId" : tid, "Quantity" : $scope.qty, "CustomerName" : $scope.cName, "TransitionDateTime" : new Date , "CashReceived" :$scope.tPrice };
                 var onsuccess = function (data, statue, headers, config)
                 {
-                    $scope.msg = `<div class = "alert alert-info"><strong>Success!</strong>successfully inserted
-                                  </div>`;
+                    alert("SUCCESS : Sale made!");
                 }
                 var onerror = function (data, statue, headers, config)
                 {
