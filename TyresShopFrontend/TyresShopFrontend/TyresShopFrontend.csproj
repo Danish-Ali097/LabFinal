@@ -73,6 +73,7 @@
     <Content Include="continental%281%29.png" />
     <Content Include="Index.html" />
     <Content Include="jquery.min.js" />
+    <Content Include="SaleHistory.html" />
     <Content Include="StyleSheet1.css" />
     <Content Include="tire-stickers-dunlop.jpg" />
     <Content Include="Tyres.html" />

@@ -34,7 +34,7 @@
             </ul>
             <ul class="navbar-nav mr-left float-right">
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-history"></i> Sale History</a>
+                    <a class="nav-link" href="SaleHistory.html"><i class="fa fa-history"></i> Sale History</a>
                 </li>
             </ul>
         </div>
@@ -78,13 +78,13 @@
             {
                 var id = $scope.select;
                 //alert(id);
-                var onsuccess = function (data, error ,headers, config)
+                var onsuccess = function (data, status ,headers, config)
                 {
                     //console.log(data.Quantity);
                     $scope.totalQty = data.Quantity;
                     $scope.Price = data.Selling_Price;
                 }
-                var onerror = function ()
+                var onerror = function (status)
                 {
                     $scope.error = "An Error occured while inserting data : " + status;
                     $scope.myError = '0';
@@ -93,6 +93,7 @@
                 promise.success(onsuccess);
                 promise.error(onerror);
             }
+            //post
             $scope.purchase = function (tid)
             {
                 //console.log("tid : " + tid + "\n qty : " + $scope.qty + "\n cname : " + $scope.cName);
@@ -100,8 +101,18 @@
                 var onsuccess = function (data, statue, headers, config)
                 {
                     alert("SUCCESS : Sale made!");
+                    var onSuccess = function (data , status, header , config)
+                    {
+                        var d = { "TyreId": data.TyreId, "Brand": data.Brand, "Country": data.Country, "Size": data.Size, "Condition": data.Condition, "Quantity": data.Quantity - $scope.qty, "Purchase_Price": data.Purchase_Price, "Selling_Price": data.Selling_Price };
+                        var p1 = $http.put('http://localhost:49830/api/Tyres/' + tid, d);
+                        p1.success(console.log("qty updated in tyres"));
+                        p1.error(console.log("error occured in updating tyres"));
+                    }
+                    var p = $http.get('http://localhost:49830/api/Tyres/' + tid);
+                    p.success(onSuccess);
+                    p.error(console.log("error occured in getting : "+ tid));
                 }
-                var onerror = function (data, statue, headers, config)
+                var onerror = function (data, status, headers, config)
                 {
                     $scope.error = "An Error occured while inserting data : " + status;
                     $scope.myError = '0';
