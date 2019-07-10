@@ -26,7 +26,7 @@
                     <a class="nav-link" href="Index.html">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Tyres </a>
+                    <a class="nav-link" href="Tyres.html">Tyres </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">About</a>
@@ -39,9 +39,53 @@
             </ul>
         </div>
     </nav>
-    
+    <div class="container" ng-controller="myCtrl">
+        <span id="eror"></span>
+        <div class="card mt-3" ng-repeat="res in result">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title">{{res.CustomerName}}</h5>
+            </div>
+            <div class="card-body">
+                <h6> Tyre Qty. {{res.Quantity}} </h6>
+                <h6> Transection DateTime : {{res.TransitionDateTime}} </h6>
+                <h6> Cash Received : {{res.CashReceived}} </h6>
+            </div>
+            <div class="card-footer">
+                <input class="btn btn-primary" ng-click="revert(res.SaleId, res.TyreId, res.Quantity)" type="submit"  value="Revert" />
+            </div>
+        </div>
+    </div>
     <script>
-       
+        var app = angular.module('myApp', []);
+        app.controller('myCtrl', function ($scope, $http)
+        {
+            //revert
+            //revert = function (sId, tId, qty)
+            //{
+            //    var tsuccess = function ()
+            //    {
+            //        console.log("qty added in tyre table");
+            //    }
+            //    var terror = function () {
+            //        console.log("qty added in tyre table");
+            //    }
+            //    var tpromise = $http.put('http://localhost:49830/api/Sales')
+            //}
+            //get
+            var onsuccess = function (data, status, headers, config)
+            {
+                $scope.result = data;
+            }
+            var onerror = function (data, status, headers, config)
+            {
+                $("#eror").html(`<div class="alert alert-warning">
+            <strong>Error!</strong> an error occured code: ${status}
+            </div>`);
+            }
+            var promise = $http.get('http://localhost:49830/api/Sales');
+            promise.success(onsuccess);
+            promise.error(onerror);
+        });
     </script>
 </body>
 </html>

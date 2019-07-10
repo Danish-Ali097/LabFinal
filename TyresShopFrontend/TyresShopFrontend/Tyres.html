@@ -97,13 +97,13 @@
             $scope.purchase = function (tid)
             {
                 //console.log("tid : " + tid + "\n qty : " + $scope.qty + "\n cname : " + $scope.cName);
-                var data = { "TyreId" : tid, "Quantity" : $scope.qty, "CustomerName" : $scope.cName, "TransitionDateTime" : new Date , "CashReceived" :$scope.tPrice };
+                var data = { "TyreId": tid, "Quantity": $scope.qty, "CustomerName": $scope.cName, "TransitionDateTime": new Date, "CashReceived": $scope.tPrice, };
                 var onsuccess = function (data, statue, headers, config)
                 {
                     alert("SUCCESS : Sale made!");
                     var onSuccess = function (data , status, header , config)
                     {
-                        var d = { "TyreId": data.TyreId, "Brand": data.Brand, "Country": data.Country, "Size": data.Size, "Condition": data.Condition, "Quantity": data.Quantity - $scope.qty, "Purchase_Price": data.Purchase_Price, "Selling_Price": data.Selling_Price };
+                        var d = { "TyreId": data.TyreId, "Brand": data.Brand, "Country": data.Country, "Size": data.Size, "Condition": data.Condition,"Quantity": data.Quantity - $scope.qty, "Purchase_Price": data.Purchase_Price, "Selling_Price": data.Selling_Price};
                         var p1 = $http.put('http://localhost:49830/api/Tyres/' + tid, d);
                         p1.success(console.log("qty updated in tyres"));
                         p1.error(console.log("error occured in updating tyres"));
